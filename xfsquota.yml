@@ -1,0 +1,68 @@
+---
+
+- name: XFS projects qouta set/ajust/remove
+  hosts: xfstest
+  become: yes
+  gather_facts: no
+
+  roles:
+  - {role: xfs-quota , mountpoint: / , dir: /projects/2 , prjname: 'project2' , bsoft: 19m , bhard: 20m , state: present }
+
+#  tasks:
+#
+#  - name: Set default project soft and hard limit on /projects of 1g
+#    xfs_quota:
+#      mountpoint: /
+#      type: project
+#      name: project1
+#      bsoft: 13m
+#      bhard: 15m
+#      state: present
+#
+#  - name: Create directory /projects/3
+#    file: 
+#      path: /projects/3
+#      state: directory
+#
+#  - name: initialize quota on /projects/3 for project2
+#    command: xfs_quota -x -c 'project -s project3' /
+#
+# 
+#  - name: Set default project soft and hard limit on /projects of 2g
+#    xfs_quota:
+#      mountpoint: /
+#      type: project
+#      name: project2
+#      bsoft: 522m
+#      bhard: 2g
+#      state: present
+#
+#
+#
+#  
+#  #- name: Remove the default limits on /opt
+#  #  xfs_quota:
+#  #    type: project
+#  #    mountpoint: /opt
+#  #    state: absent
+#  #
+#  #- name: Set default soft user inode limits on /home of 1024 inodes and hard of 2048
+#  #  xfs_quota:
+#  #    type: user
+#  #    mountpoint: /home
+#  #    isoft: 1024
+#  #    ihard: 2048
+#  
+#  #- name: Remove the default limits on /opt
+#  #  xfs_quota:
+#  #    type: project
+#  #    mountpoint: /opt
+#  #    state: absent
+#  #
+#  #- name: Set default soft user inode limits on /home of 1024 inodes and hard of 2048
+#  #  xfs_quota:
+#  #    type: user
+#  #    mountpoint: /home
+#  #    isoft: 1024
+#  #    ihard: 2048
+#  
