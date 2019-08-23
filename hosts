@@ -1,6 +1,9 @@
 
-[xfstest]
-xfstest
+# mntpoint is where xfs filesystem mounted on NFS server
+# xfstest host name resolves through /etc/hosts in this example
+# it may be DNS name or IP address
+[xfsquotaserver]
+xfstest mntpoint=/
 
 
 

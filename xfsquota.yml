@@ -1,17 +1,17 @@
 ---
 
 - name: XFS projects qouta set/ajust/remove
-  hosts: xfstest
+  hosts: xfsquotaserver
   become: yes
   gather_facts: no
 
   # Delete unwanted quotas before regenerating /etc/proj[ects|id] files
   pre_tasks:
-  - name: Remove quota from project0
+  - name: Remove quota from project4
     xfs_quota:
       type: project
-      name: project0
-      mountpoint: /
+      name: project4
+      mountpoint: "{{ mntpoint }}" 
       state: absent
 
   # Task(s) for generating /etc/proj[ects|id] files may go here
@@ -31,7 +31,7 @@
 
   - name: Set soft and hard limit on /projects/1 
     xfs_quota:
-      mountpoint: /
+      mountpoint: "{{ mntpoint }}" 
       type: project
       name: project1
       bsoft: 13g
@@ -39,7 +39,7 @@
 
   - name: Set soft and hard limit on /projects/2 
     xfs_quota:
-      mountpoint: /
+      mountpoint: "{{ mntpoint }}" 
       type: project
       name: project2
       bsoft: 23g
@@ -47,7 +47,7 @@
 
   - name: Change soft and hard limit on /projects/2 
     xfs_quota:
-      mountpoint: /
+      mountpoint: "{{ mntpoint }}" 
       type: project
       name: project2
       bsoft: 33g
