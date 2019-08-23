@@ -5,64 +5,53 @@
   become: yes
   gather_facts: no
 
-  roles:
-  - {role: xfs-quota , mountpoint: / , dir: /projects/2 , prjname: 'project2' , bsoft: 19m , bhard: 20m , state: present }
+  # Delete unwanted quotas before regenerating /etc/proj[ects|id] files
+  pre_tasks:
+  - name: Remove quota from project0
+    xfs_quota:
+      type: project
+      name: project0
+      mountpoint: /
+      state: absent
 
-#  tasks:
-#
-#  - name: Set default project soft and hard limit on /projects of 1g
-#    xfs_quota:
-#      mountpoint: /
-#      type: project
-#      name: project1
-#      bsoft: 13m
-#      bhard: 15m
-#      state: present
-#
-#  - name: Create directory /projects/3
-#    file: 
-#      path: /projects/3
-#      state: directory
-#
-#  - name: initialize quota on /projects/3 for project2
-#    command: xfs_quota -x -c 'project -s project3' /
-#
-# 
-#  - name: Set default project soft and hard limit on /projects of 2g
-#    xfs_quota:
-#      mountpoint: /
-#      type: project
-#      name: project2
-#      bsoft: 522m
-#      bhard: 2g
-#      state: present
-#
-#
-#
-#  
-#  #- name: Remove the default limits on /opt
-#  #  xfs_quota:
-#  #    type: project
-#  #    mountpoint: /opt
-#  #    state: absent
-#  #
-#  #- name: Set default soft user inode limits on /home of 1024 inodes and hard of 2048
-#  #  xfs_quota:
-#  #    type: user
-#  #    mountpoint: /home
-#  #    isoft: 1024
-#  #    ihard: 2048
-#  
-#  #- name: Remove the default limits on /opt
-#  #  xfs_quota:
-#  #    type: project
-#  #    mountpoint: /opt
-#  #    state: absent
-#  #
-#  #- name: Set default soft user inode limits on /home of 1024 inodes and hard of 2048
-#  #  xfs_quota:
-#  #    type: user
-#  #    mountpoint: /home
-#  #    isoft: 1024
-#  #    ihard: 2048
-#  
+  # Task(s) for generating /etc/proj[ects|id] files may go here
+
+  roles:
+  # OR role(s) for generating /etc/proj[ects|id] files may go right here
+  # Than we initialize quotas on disk for new projects with xfs_quota -x -c 'project -s <project_name>' command
+  # we may execute this command for all projects, old and new 
+  - {role: xfsquotainit , dir: /projects/1 , prjname: 'project1' }
+  - {role: xfsquotainit , dir: /projects/2 , prjname: 'project2' }
+
+
+  # And here we may add or ajust quotas for disk and inodes usage with xfs_quota module
+  # Added to Ansible in version 2.8
+  # Documentation: https://docs.ansible.com/ansible/latest/modules/xfs_quota_module.html
+  tasks:
+
+  - name: Set soft and hard limit on /projects/1 
+    xfs_quota:
+      mountpoint: /
+      type: project
+      name: project1
+      bsoft: 13g
+      bhard: 15g
+
+  - name: Set soft and hard limit on /projects/2 
+    xfs_quota:
+      mountpoint: /
+      type: project
+      name: project2
+      bsoft: 23g
+      bhard: 25g
+
+  - name: Change soft and hard limit on /projects/2 
+    xfs_quota:
+      mountpoint: /
+      type: project
+      name: project2
+      bsoft: 33g
+      bhard: 35g
+
+
+

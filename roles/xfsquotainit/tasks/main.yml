@@ -1,0 +1,8 @@
+---
+  - name: "Create a directory {{ dir }} for project {{ prjname }}"
+    file: path={{ dir }} state=directory
+
+  - name: "Initialize quota for project {{ prjname }}"
+    shell: xfs_quota -x -c 'project -s {{ prjname }}'
+
+
